@@ -3,6 +3,7 @@
 import {
   forwardRef,
   type ComponentPropsWithoutRef,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 
@@ -26,7 +27,7 @@ const SIZE: Record<ShimmerButtonSize, string> = {
 };
 
 // ShimmerButton — dark primary button with a continuous light sweep.
-// Inspired by common open-source shimmer / spotlight button patterns (MIT-style copy-paste).
+// Pure CSS animation (no styled-jsx / framer-motion).
 export const ShimmerButton = forwardRef<
   HTMLButtonElement,
   ShimmerButtonProps
@@ -45,52 +46,53 @@ export const ShimmerButton = forwardRef<
     ref,
   ) => {
     return (
-      <button
-        ref={ref}
-        type={type}
-        disabled={disabled}
-        data-slot="shimmer-button"
-        data-size={size}
-        style={
-          {
-            "--shimmer-color": shimmerColor,
-            ...style,
-          } as React.CSSProperties
-        }
-        className={cn(
-          "relative inline-flex cursor-pointer items-center justify-center overflow-hidden",
-          "bg-neutral-900 font-sans font-semibold text-white outline-none select-none",
-          "transition-[transform,opacity,background-color] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
-          "hover:bg-neutral-800 active:scale-[0.98]",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900",
-          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40",
-          "motion-reduce:transition-none",
-          SIZE[size],
-          className,
-        )}
-        {...props}
-      >
-        <span
-          aria-hidden
-          className={cn(
-            "pointer-events-none absolute inset-0 -translate-x-full",
-            "bg-gradient-to-r from-transparent via-[var(--shimmer-color)] to-transparent",
-            "animate-[shimmer-sweep_2.2s_ease-in-out_infinite]",
-            "motion-reduce:animate-none",
-          )}
-        />
-        <span className="relative z-10">{children}</span>
-        <style jsx>{`
-          @keyframes shimmer-sweep {
-            0% {
-              transform: translateX(-100%);
-            }
-            100% {
-              transform: translateX(100%);
-            }
+      <>
+        <style>{`
+          @keyframes stealthisui-shimmer-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
           }
         `}</style>
-      </button>
+        <button
+          ref={ref}
+          type={type}
+          disabled={disabled}
+          data-slot="shimmer-button"
+          data-size={size}
+          style={
+            {
+              "--shimmer-color": shimmerColor,
+              ...style,
+            } as CSSProperties
+          }
+          className={cn(
+            "relative inline-flex cursor-pointer items-center justify-center overflow-hidden",
+            "bg-neutral-900 font-sans font-semibold text-white outline-none select-none",
+            "transition-[transform,opacity,background-color] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
+            "hover:bg-neutral-800 active:scale-[0.98]",
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900",
+            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40",
+            "motion-reduce:transition-none",
+            SIZE[size],
+            className,
+          )}
+          {...props}
+        >
+          <span
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-0",
+              "bg-gradient-to-r from-transparent via-[var(--shimmer-color)] to-transparent",
+              "motion-reduce:hidden",
+            )}
+            style={{
+              animation:
+                "stealthisui-shimmer-sweep 2.2s ease-in-out infinite",
+            }}
+          />
+          <span className="relative z-10">{children}</span>
+        </button>
+      </>
     );
   },
 );

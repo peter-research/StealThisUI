@@ -1,100 +1,101 @@
-"use client";
+import React, { type ComponentPropsWithoutRef, type CSSProperties } from "react"
 
-import {
-  forwardRef,
-  type ComponentPropsWithoutRef,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { cn } from "@/lib/cn"
 
-import { cn } from "@/lib/cn";
+export interface ShimmerButtonProps extends ComponentPropsWithoutRef<"button"> {
+  shimmerColor?: string
+  shimmerSize?: string
+  borderRadius?: string
+  shimmerDuration?: string
+  background?: string
+  className?: string
+  children?: React.ReactNode
+}
 
-export type ShimmerButtonSize = "sm" | "md" | "lg";
+// Note: Requires the following keyframes in your global CSS or Tailwind config for the animations to work:
+// @keyframes shimmer-slide {
+//   to { transform: translate(calc(100cqw - 100%), 0); }
+// }
+// @keyframes spin-around {
+//   0% { transform: translateZ(0) rotate(0); }
+//   15%, 35% { transform: translateZ(0) rotate(90deg); }
+//   65%, 85% { transform: translateZ(0) rotate(270deg); }
+//   100% { transform: translateZ(0) rotate(360deg); }
+// }
+// .animate-shimmer-slide { animation: shimmer-slide var(--speed) ease-in-out infinite alternate; }
+// .animate-spin-around { animation: spin-around calc(var(--speed) * 2) infinite linear; }
 
-export type ShimmerButtonProps = Readonly<
-  {
-    children: ReactNode;
-    size?: ShimmerButtonSize;
-    /** Accent color for the shimmer highlight */
-    shimmerColor?: string;
-  } & ComponentPropsWithoutRef<"button">
->;
-
-const SIZE: Record<ShimmerButtonSize, string> = {
-  sm: "h-9 gap-1.5 rounded-xl px-3.5 text-xs",
-  md: "h-10 gap-2 rounded-xl px-4 text-sm",
-  lg: "h-12 gap-2 rounded-2xl px-5 text-sm",
-};
-
-// ShimmerButton — dark primary button with a continuous light sweep.
-// Pure CSS animation (no styled-jsx / framer-motion).
-export const ShimmerButton = forwardRef<
+export const ShimmerButton = React.forwardRef<
   HTMLButtonElement,
   ShimmerButtonProps
 >(
   (
     {
+      shimmerColor = "#ffffff",
+      shimmerSize = "0.05em",
+      shimmerDuration = "3s",
+      borderRadius = "100px",
+      background = "rgba(0, 0, 0, 1)",
       className,
       children,
-      size = "md",
-      type = "button",
-      disabled,
-      shimmerColor = "rgba(255,255,255,0.35)",
-      style,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
-      <>
-        <style>{`
-          @keyframes stealthisui-shimmer-sweep {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-          }
-        `}</style>
-        <button
-          ref={ref}
-          type={type}
-          disabled={disabled}
-          data-slot="shimmer-button"
-          data-size={size}
-          style={
-            {
-              "--shimmer-color": shimmerColor,
-              ...style,
-            } as CSSProperties
-          }
+      <button
+        style={
+          {
+            "--spread": "90deg",
+            "--shimmer-color": shimmerColor,
+            "--radius": borderRadius,
+            "--speed": shimmerDuration,
+            "--cut": shimmerSize,
+            "--bg": background,
+          } as CSSProperties
+        }
+        className={cn(
+          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden [border-radius:var(--radius)] border border-white/10 px-6 py-3 whitespace-nowrap text-white [background:var(--bg)]",
+          "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
+          className
+        )}
+        ref={ref}
+        {...props}
+      >
+        {/* spark container */}
+        <div
           className={cn(
-            "relative inline-flex cursor-pointer items-center justify-center overflow-hidden",
-            "bg-neutral-900 font-sans font-semibold text-white outline-none select-none",
-            "transition-[transform,opacity,background-color] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
-            "hover:bg-neutral-800 active:scale-[0.98]",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900",
-            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40",
-            "motion-reduce:transition-none",
-            SIZE[size],
-            className,
+            "-z-30 blur-[2px]",
+            "absolute inset-0 overflow-visible [container-type:size]"
           )}
-          {...props}
         >
-          <span
-            aria-hidden
-            className={cn(
-              "pointer-events-none absolute inset-0",
-              "bg-gradient-to-r from-transparent via-[var(--shimmer-color)] to-transparent",
-              "motion-reduce:hidden",
-            )}
-            style={{
-              animation:
-                "stealthisui-shimmer-sweep 2.2s ease-in-out infinite",
-            }}
-          />
-          <span className="relative z-10">{children}</span>
-        </button>
-      </>
-    );
-  },
-);
+          {/* spark */}
+          <div className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh] rounded-none">
+            {/* spark before */}
+            <div className="animate-spin-around absolute -inset-full w-auto [translate:0_0] rotate-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]" />
+          </div>
+        </div>
+        {children}
 
-ShimmerButton.displayName = "ShimmerButton";
+        {/* Highlight */}
+        <div
+          className={cn(
+            "absolute inset-0 size-full rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
+            "transform-gpu transition-all duration-300 ease-in-out",
+            "group-hover:shadow-[inset_0_-6px_10px_#ffffff3f]",
+            "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]"
+          )}
+        />
+
+        {/* backdrop */}
+        <div
+          className={cn(
+            "absolute inset-[var(--cut)] -z-20 [border-radius:var(--radius)] [background:var(--bg)]"
+          )}
+        />
+      </button>
+    )
+  }
+)
+
+ShimmerButton.displayName = "ShimmerButton"

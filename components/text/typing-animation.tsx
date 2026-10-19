@@ -204,7 +204,7 @@ export function TypingAnimation({
   const getCursorChar = () => {
     switch (cursorStyle) {
       case "block":
-        return "\u258c"
+        return "▌"
       case "underscore":
         return "_"
       case "line":

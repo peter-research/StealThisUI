@@ -1,29 +1,23 @@
-import React, { type ComponentPropsWithoutRef, type CSSProperties } from "react"
+"use client";
 
-import { cn } from "@/lib/cn"
+import React, { type ComponentPropsWithoutRef, type CSSProperties } from "react";
+
+import { cn } from "@/lib/cn";
+
+// Adapted from Magic UI (https://magicui.design) - MIT License.
+// Note: Requires custom Tailwind animations `animate-shimmer-slide` and `animate-spin-around`.
+// Add the following keyframes to your global CSS or Tailwind config for full effect:
+// @keyframes shimmer-slide { ... } @keyframes spin-around { ... }
 
 export interface ShimmerButtonProps extends ComponentPropsWithoutRef<"button"> {
-  shimmerColor?: string
-  shimmerSize?: string
-  borderRadius?: string
-  shimmerDuration?: string
-  background?: string
-  className?: string
-  children?: React.ReactNode
+  shimmerColor?: string;
+  shimmerSize?: string;
+  borderRadius?: string;
+  shimmerDuration?: string;
+  background?: string;
+  className?: string;
+  children?: React.ReactNode;
 }
-
-// Note: Requires the following keyframes in your global CSS or Tailwind config for the animations to work:
-// @keyframes shimmer-slide {
-//   to { transform: translate(calc(100cqw - 100%), 0); }
-// }
-// @keyframes spin-around {
-//   0% { transform: translateZ(0) rotate(0); }
-//   15%, 35% { transform: translateZ(0) rotate(90deg); }
-//   65%, 85% { transform: translateZ(0) rotate(270deg); }
-//   100% { transform: translateZ(0) rotate(360deg); }
-// }
-// .animate-shimmer-slide { animation: shimmer-slide var(--speed) ease-in-out infinite alternate; }
-// .animate-spin-around { animation: spin-around calc(var(--speed) * 2) infinite linear; }
 
 export const ShimmerButton = React.forwardRef<
   HTMLButtonElement,
@@ -66,11 +60,11 @@ export const ShimmerButton = React.forwardRef<
         <div
           className={cn(
             "-z-30 blur-[2px]",
-            "absolute inset-0 overflow-visible [container-type:size]"
+            "@container-[size] absolute inset-0 overflow-visible"
           )}
         >
           {/* spark */}
-          <div className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh] rounded-none">
+          <div className="animate-shimmer-slide absolute inset-0 aspect-[1] h-[100cqh] rounded-none [mask:none]">
             {/* spark before */}
             <div className="animate-spin-around absolute -inset-full w-auto [translate:0_0] rotate-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]" />
           </div>
@@ -80,9 +74,17 @@ export const ShimmerButton = React.forwardRef<
         {/* Highlight */}
         <div
           className={cn(
-            "absolute inset-0 size-full rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
+            "absolute inset-0 size-full",
+
+            "rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
+
+            // transition
             "transform-gpu transition-all duration-300 ease-in-out",
+
+            // on hover
             "group-hover:shadow-[inset_0_-6px_10px_#ffffff3f]",
+
+            // on click
             "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]"
           )}
         />
@@ -90,12 +92,12 @@ export const ShimmerButton = React.forwardRef<
         {/* backdrop */}
         <div
           className={cn(
-            "absolute inset-[var(--cut)] -z-20 [border-radius:var(--radius)] [background:var(--bg)]"
+            "absolute inset-(--cut) -z-20 [border-radius:var(--radius)] [background:var(--bg)]"
           )}
         />
       </button>
-    )
+    );
   }
-)
+);
 
-ShimmerButton.displayName = "ShimmerButton"
+ShimmerButton.displayName = "ShimmerButton";

@@ -1,37 +1,20 @@
-"use client"
-
-import { cn } from "@/lib/cn"
+import * as React from "react"
 import { Loader2 } from "lucide-react"
 
-interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
-  size?: "sm" | "md" | "lg"
-}
+import { cn } from "../../lib/cn"
 
-export function Spinner({ className, size = "md", ...props }: SpinnerProps) {
-  const sizeClasses = {
-    sm: "h-4 w-4",
-    md: "h-6 w-6",
-    lg: "h-8 w-8",
-  }
-
+function Spinner({
+  className,
+  ...props
+}: React.ComponentProps<"svg">) {
   return (
-    <div
+    <Loader2
       role="status"
       aria-label="Loading"
-      className={cn("animate-spin text-muted-foreground", sizeClasses[size], className)}
+      className={cn("size-4 animate-spin", className)}
       {...props}
-    >
-      <Loader2 className="h-full w-full" />
-    </div>
+    />
   )
 }
 
-export function SpinnerDemo() {
-  return (
-    <div className="flex items-center gap-4">
-      <Spinner size="sm" />
-      <Spinner />
-      <Spinner size="lg" />
-    </div>
-  )
-}
+export { Spinner }

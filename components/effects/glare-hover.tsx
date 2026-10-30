@@ -1,43 +1,79 @@
 import type { ComponentProps, CSSProperties } from "react"
 import { useMemo } from "react"
 
-import { cn } from "@/lib/cn"
+import { cn } from "@/lib/utils"
 
 export interface GlareHoverProps extends ComponentProps<"div"> {
   /**
    * Optional CSS width on the root element (e.g. `"100%"`, `"320px"`).
+   * @example
+   * ```tsx
+   * <GlareHover width="100%">...</GlareHover>
+   * ```
    */
   width?: string
   /**
    * Optional CSS height on the root element (e.g. `"auto"`, `"200px"`).
+   * @example
+   * ```tsx
+   * <GlareHover height="200px">...</GlareHover>
+   * ```
    */
   height?: string
   /**
    * Background color of the wrapper (CSS color string).
+   * @example
+   * ```tsx
+   * <GlareHover background="#0a0a0a">...</GlareHover>
+   * ```
    */
   background?: string
   /**
    * Glare highlight as `#rrggbb` or `#rgb`; parsed to `rgba` for the gradient.
+   * @example
+   * ```tsx
+   * <GlareHover color="#a78bfa">...</GlareHover>
+   * ```
    */
   color?: Color
   /**
    * Opacity applied to the glare color when converting hex to `rgba` (0–1).
+   * @example
+   * ```tsx
+   * <GlareHover color="#ffffff" opacity={0.35}>...</GlareHover>
+   * ```
    */
   opacity?: number
   /**
    * Gradient angle in degrees (`--gh-angle`).
+   * @example
+   * ```tsx
+   * <GlareHover angle={-30}>...</GlareHover>
+   * ```
    */
   angle?: number
   /**
    * Glare tile size as a percentage of the element (`--gh-size`, `background-size`).
+   * @example
+   * ```tsx
+   * <GlareHover size={280}>...</GlareHover>
+   * ```
    */
   size?: number
   /**
    * Transition duration for the glare sweep in milliseconds (`--gh-duration`).
+   * @example
+   * ```tsx
+   * <GlareHover duration={500}>...</GlareHover>
+   * ```
    */
   duration?: number
   /**
    * When `true`, the glare transition only runs on hover (no animation until pointer enters).
+   * @example
+   * ```tsx
+   * <GlareHover playOnce>...</GlareHover>
+   * ```
    */
   playOnce?: boolean
 }

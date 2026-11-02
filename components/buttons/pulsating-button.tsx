@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import React, { useImperativeHandle, useLayoutEffect, useRef } from "react";
+import React, { useImperativeHandle, useLayoutEffect, useRef } from "react"
 
-import { cn } from "@/lib/cn";
+import { cn } from "../../lib/cn"
 
 interface PulsatingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  pulseColor?: string;
-  duration?: string;
-  distance?: string;
-  variant?: "pulse" | "ripple";
+  pulseColor?: string
+  duration?: string
+  distance?: string
+  variant?: "pulse" | "ripple"
 }
 
 export const PulsatingButton = React.forwardRef<
@@ -27,73 +27,73 @@ export const PulsatingButton = React.forwardRef<
     },
     ref
   ) => {
-    const innerRef = useRef<HTMLButtonElement>(null);
-    useImperativeHandle(ref, () => innerRef.current!);
+    const innerRef = useRef<HTMLButtonElement>(null)
+    useImperativeHandle(ref, () => innerRef.current!)
 
     useLayoutEffect(() => {
-      const button = innerRef.current;
-      if (!button) return;
+      const button = innerRef.current
+      if (!button) return
 
       if (pulseColor) {
-        button.style.removeProperty("--bg");
-        return;
+        button.style.removeProperty("--bg")
+        return
       }
 
-      let animationFrameId = 0;
-      let currentBg = "";
+      let animationFrameId = 0
+      let currentBg = ""
 
       const updateBg = () => {
-        animationFrameId = 0;
+        animationFrameId = 0
 
-        const nextBg = getComputedStyle(button).backgroundColor;
-        if (nextBg === currentBg) return;
+        const nextBg = getComputedStyle(button).backgroundColor
+        if (nextBg === currentBg) return
 
-        currentBg = nextBg;
-        button.style.setProperty("--bg", nextBg);
-      };
+        currentBg = nextBg
+        button.style.setProperty("--bg", nextBg)
+      }
 
       const scheduleBgUpdate = () => {
-        if (animationFrameId) return;
-        animationFrameId = window.requestAnimationFrame(updateBg);
-      };
+        if (animationFrameId) return
+        animationFrameId = window.requestAnimationFrame(updateBg)
+      }
 
-      updateBg();
+      updateBg()
 
-      const themeObserver = new MutationObserver(scheduleBgUpdate);
+      const themeObserver = new MutationObserver(scheduleBgUpdate)
       themeObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ["class"],
-      });
+      })
 
-      const buttonObserver = new MutationObserver(scheduleBgUpdate);
+      const buttonObserver = new MutationObserver(scheduleBgUpdate)
       buttonObserver.observe(button, {
         attributes: true,
-      });
+      })
 
       const syncEvents = [
         "blur",
         "focus",
         "pointerenter",
         "pointerleave",
-      ] as const;
+      ] as const
 
       for (const eventName of syncEvents) {
-        button.addEventListener(eventName, scheduleBgUpdate);
+        button.addEventListener(eventName, scheduleBgUpdate)
       }
 
       return () => {
         if (animationFrameId) {
-          window.cancelAnimationFrame(animationFrameId);
+          window.cancelAnimationFrame(animationFrameId)
         }
 
-        themeObserver.disconnect();
-        buttonObserver.disconnect();
+        themeObserver.disconnect()
+        buttonObserver.disconnect()
 
         for (const eventName of syncEvents) {
-          button.removeEventListener(eventName, scheduleBgUpdate);
+          button.removeEventListener(eventName, scheduleBgUpdate)
         }
-      };
-    }, [pulseColor]);
+      }
+    }, [pulseColor])
 
     return (
       <button
@@ -120,8 +120,11 @@ export const PulsatingButton = React.forwardRef<
           )}
         />
       </button>
-    );
+    )
   }
-);
+)
 
-PulsatingButton.displayName = "PulsatingButton";
+PulsatingButton.displayName = "PulsatingButton"
+
+// Note: Requires Tailwind config with pulse-ripple keyframe for ripple variant.
+// Source: Magic UI (MIT License) - https://magicui.design

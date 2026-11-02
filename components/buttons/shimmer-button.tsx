@@ -1,22 +1,15 @@
-"use client";
+import React, { type ComponentPropsWithoutRef, type CSSProperties } from "react"
 
-import React, { type ComponentPropsWithoutRef, type CSSProperties } from "react";
-
-import { cn } from "@/lib/cn";
-
-// Adapted from Magic UI (https://magicui.design) - MIT License.
-// Note: Requires custom Tailwind animations `animate-shimmer-slide` and `animate-spin-around`.
-// Add the following keyframes to your global CSS or Tailwind config for full effect:
-// @keyframes shimmer-slide { ... } @keyframes spin-around { ... }
+import { cn } from "../../lib/cn"
 
 export interface ShimmerButtonProps extends ComponentPropsWithoutRef<"button"> {
-  shimmerColor?: string;
-  shimmerSize?: string;
-  borderRadius?: string;
-  shimmerDuration?: string;
-  background?: string;
-  className?: string;
-  children?: React.ReactNode;
+  shimmerColor?: string
+  shimmerSize?: string
+  borderRadius?: string
+  shimmerDuration?: string
+  background?: string
+  className?: string
+  children?: React.ReactNode
 }
 
 export const ShimmerButton = React.forwardRef<
@@ -75,16 +68,9 @@ export const ShimmerButton = React.forwardRef<
         <div
           className={cn(
             "absolute inset-0 size-full",
-
             "rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
-
-            // transition
             "transform-gpu transition-all duration-300 ease-in-out",
-
-            // on hover
             "group-hover:shadow-[inset_0_-6px_10px_#ffffff3f]",
-
-            // on click
             "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]"
           )}
         />
@@ -96,8 +82,11 @@ export const ShimmerButton = React.forwardRef<
           )}
         />
       </button>
-    );
+    )
   }
-);
+)
 
-ShimmerButton.displayName = "ShimmerButton";
+ShimmerButton.displayName = "ShimmerButton"
+
+// Note: Requires Tailwind config with shimmer-slide and spin-around keyframes for full animation.
+// Source: Magic UI (MIT License) - https://magicui.design

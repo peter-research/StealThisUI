@@ -2,14 +2,14 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "../../lib/cn"
 
 const buttonGroupVariants = cva(
-  "flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
+  "flex w-fit items-stretch has-[>[data-slot=button-group]]:gap-2 [&>*]:focus-visible:relative [&>*]:focus-visible:z-10",
   {
     variants: {
       orientation: {
         horizontal:
-          "*:data-[slot]:rounded-r-none [&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0",
+          "[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none",
         vertical:
-          "flex-col *:data-[slot]:rounded-b-none [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0",
+          "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none",
       },
     },
     defaultVariants: {
@@ -40,7 +40,10 @@ function ButtonGroupText({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex items-center gap-2 text-sm font-medium [&_svg]:pointer-events-none", className)}
+      className={cn(
+        "flex items-center gap-2 rounded-md border bg-muted px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
       {...props}
     />
   )
@@ -54,11 +57,10 @@ function ButtonGroupSeparator({
   return (
     <div
       data-slot="button-group-separator"
-      role="separator"
-      aria-orientation={orientation}
+      data-orientation={orientation}
       className={cn(
-        "bg-border shrink-0",
-        orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
+        "relative m-0 self-stretch bg-input",
+        orientation === "vertical" ? "h-auto w-px" : "h-px w-auto",
         className
       )}
       {...props}
@@ -66,4 +68,9 @@ function ButtonGroupSeparator({
   )
 }
 
-export { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants }
+export {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  buttonGroupVariants,
+}

@@ -3,7 +3,7 @@
 import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
 import { useInView, useMotionValue, useSpring } from "motion/react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/cn"
 
 interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
   value: number
@@ -13,6 +13,12 @@ interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
   decimalPlaces?: number
 }
 
+/**
+ * Number Ticker
+ *
+ * An animated number that counts up or down when in view.
+ * Source: Magic UI (MIT)
+ */
 export function NumberTicker({
   value,
   startValue = 0,

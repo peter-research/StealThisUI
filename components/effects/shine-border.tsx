@@ -26,18 +26,7 @@ interface ShineBorderProps extends React.HTMLAttributes<HTMLDivElement> {
  * Shine Border
  *
  * An animated background border effect component with configurable properties.
- *
- * Required CSS (add to your global CSS or Tailwind config):
- * @theme inline {
- *   --animate-shine: shine var(--duration) infinite linear;
- * }
- * @keyframes shine {
- *   0% { background-position: 0% 0%; }
- *   50% { background-position: 100% 100%; }
- *   to { background-position: 0% 0%; }
- * }
- *
- * Source: https://magicui.design/docs/components/shine-border (MIT License)
+ * Source: Magic UI (MIT)
  */
 export function ShineBorder({
   borderWidth = 1,

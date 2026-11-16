@@ -1,15 +1,24 @@
-import { cn } from "@/lib/cn"
+"use client";
 
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+import React from "react";
+import { cn } from "@/lib/cn";
+
+interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+/**
+ * Skeleton loading placeholder. Use while content is loading.
+ * Pure Tailwind, no extra dependencies.
+ */
+export function Skeleton({ className, ...props }: SkeletonProps) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-muted", className)}
+      className={cn(
+        "animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-800",
+        className
+      )}
       {...props}
     />
-  )
+  );
 }
 
-export { Skeleton }
+Skeleton.displayName = "Skeleton";

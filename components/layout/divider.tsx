@@ -1,37 +1,28 @@
-import React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-interface DividerProps {
-  orientation?: "horizontal" | "vertical"
-  className?: string
-  label?: string
+export interface DividerProps extends React.HTMLAttributes<HTMLDivElement> {
+  orientation?: "horizontal" | "vertical";
+  decorative?: boolean;
 }
 
-export function Divider({
-  orientation = "horizontal",
-  className,
-  label,
-}: DividerProps) {
-  if (orientation === "vertical") {
+const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
+  ({ className, orientation = "horizontal", decorative = true, ...props }, ref) => {
     return (
       <div
-        className={cn("h-full w-px bg-border", className)}
-        role="separator"
-        aria-orientation="vertical"
+        ref={ref}
+        role={decorative ? "none" : "separator"}
+        aria-orientation={orientation}
+        className={cn(
+          "shrink-0 bg-border",
+          orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
+          className
+        )}
+        {...props}
       />
-    )
+    );
   }
+);
+Divider.displayName = "Divider";
 
-  return (
-    <div
-      className={cn("flex items-center gap-2 w-full", className)}
-      role="separator"
-    >
-      <div className="flex-1 h-px bg-border" />
-      {label && (
-        <span className="text-xs text-muted-foreground px-2">{label}</span>
-      )}
-      <div className="flex-1 h-px bg-border" />
-    </div>
-  )
-}
+export { Divider };

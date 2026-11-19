@@ -1,14 +1,16 @@
-"use client"
+"use client";
 
-import { motion, useScroll, type MotionProps } from "framer-motion"
+import { motion, useScroll, type MotionProps } from "motion/react";
 
-import { cn } from "@/lib/cn"
+import { cn } from "@/lib/cn";
+
+// Adapted from Magic UI (https://magicui.design) - MIT License.
 
 interface ScrollProgressProps extends Omit<
   React.HTMLAttributes<HTMLElement>,
   keyof MotionProps
 > {
-  ref?: React.Ref<HTMLDivElement>
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 export function ScrollProgress({
@@ -16,13 +18,13 @@ export function ScrollProgress({
   ref,
   ...props
 }: ScrollProgressProps) {
-  const { scrollYProgress } = useScroll()
+  const { scrollYProgress } = useScroll();
 
   return (
     <motion.div
       ref={ref}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 h-px origin-left bg-gradient-to-r from-[#A97CF8] via-[#F38CB8] to-[#FDCC92]",
+        "fixed inset-x-0 top-0 z-50 h-px origin-left bg-linear-to-r from-[#A97CF8] via-[#F38CB8] to-[#FDCC92]",
         className
       )}
       style={{
@@ -30,5 +32,5 @@ export function ScrollProgress({
       }}
       {...props}
     />
-  )
+  );
 }

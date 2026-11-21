@@ -1,21 +1,20 @@
-"use client"
+"use client";
 
-import { motion, type MotionStyle, type Transition } from "motion/react"
-
-import { cn } from "@/lib/cn"
+import { motion, type MotionStyle, type Transition } from "framer-motion";
+import { cn } from "@/lib/cn";
 
 interface BorderBeamProps {
-  size?: number
-  duration?: number
-  delay?: number
-  colorFrom?: string
-  colorTo?: string
-  transition?: Transition
-  className?: string
-  style?: React.CSSProperties
-  reverse?: boolean
-  initialOffset?: number
-  borderWidth?: number
+  size?: number;
+  duration?: number;
+  delay?: number;
+  colorFrom?: string;
+  colorTo?: string;
+  transition?: Transition;
+  className?: string;
+  style?: React.CSSProperties;
+  reverse?: boolean;
+  initialOffset?: number;
+  borderWidth?: number;
 }
 
 export const BorderBeam = ({
@@ -70,5 +69,5 @@ export const BorderBeam = ({
         }}
       />
     </div>
-  )
-}
+  );
+};

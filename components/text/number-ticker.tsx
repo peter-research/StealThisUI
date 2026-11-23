@@ -1,24 +1,18 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
-import { useInView, useMotionValue, useSpring } from "motion/react"
+import { useInView, useMotionValue, useSpring } from "motion/react";
+import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
 
-import { cn } from "@/lib/cn"
+import { cn } from "../../lib/cn";
 
 interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
-  value: number
-  startValue?: number
-  direction?: "up" | "down"
-  delay?: number
-  decimalPlaces?: number
+  value: number;
+  startValue?: number;
+  direction?: "up" | "down";
+  delay?: number;
+  decimalPlaces?: number;
 }
 
-/**
- * Number Ticker
- *
- * An animated number that counts up or down when in view.
- * Source: Magic UI (MIT)
- */
 export function NumberTicker({
   value,
   startValue = 0,
@@ -28,29 +22,22 @@ export function NumberTicker({
   decimalPlaces = 0,
   ...props
 }: NumberTickerProps) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const motionValue = useMotionValue(direction === "down" ? value : startValue)
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(direction === "down" ? value : startValue);
   const springValue = useSpring(motionValue, {
     damping: 60,
     stiffness: 100,
-  })
-  const isInView = useInView(ref, { once: true, margin: "0px" })
+  });
+  const isInView = useInView(ref, { once: true, margin: "0px" });
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | null = null
-
     if (isInView) {
-      timer = setTimeout(() => {
-        motionValue.set(direction === "down" ? startValue : value)
-      }, delay * 1000)
+      const timer = setTimeout(() => {
+        motionValue.set(direction === "down" ? startValue : value);
+      }, delay * 1000);
+      return () => clearTimeout(timer);
     }
-
-    return () => {
-      if (timer !== null) {
-        clearTimeout(timer)
-      }
-    }
-  }, [motionValue, isInView, delay, value, direction, startValue])
+  }, [motionValue, isInView, delay, value, direction, startValue]);
 
   useEffect(
     () =>
@@ -59,22 +46,22 @@ export function NumberTicker({
           ref.current.textContent = Intl.NumberFormat("en-US", {
             minimumFractionDigits: decimalPlaces,
             maximumFractionDigits: decimalPlaces,
-          }).format(Number(latest.toFixed(decimalPlaces)))
+          }).format(Number(latest.toFixed(decimalPlaces)));
         }
       }),
-    [springValue, decimalPlaces]
-  )
+    [springValue, decimalPlaces],
+  );
 
   return (
     <span
       ref={ref}
       className={cn(
-        "inline-block tracking-wider text-black tabular-nums dark:text-white",
-        className
+        "inline-block tabular-nums tracking-wider text-black dark:text-white",
+        className,
       )}
       {...props}
     >
       {startValue}
     </span>
-  )
+  );
 }
